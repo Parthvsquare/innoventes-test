@@ -7,20 +7,23 @@ import (
 	"strconv"
 	"time"
 
+	dbSql "innoventes-test/db/sqlc"
+	myDb "innoventes-test/internal/database"
+
 	_ "github.com/joho/godotenv/autoload"
-	"innoventes-test/internal/database"
 )
 
 type Server struct {
 	port int
-	db   database.Service
+	db   *dbSql.Queries
 }
 
 func NewServer() *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
+	database := myDb.New()
 	NewServer := &Server{
 		port: port,
-		db:   database.New(),
+		db:   database,
 	}
 
 	// Declare Server config
