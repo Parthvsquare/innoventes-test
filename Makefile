@@ -1,4 +1,21 @@
-# Simple Makefile for a Go project
+DB_HOST=localhost
+DB_PORT=5432
+DB_DATABASE=juckbox
+DB_USERNAME=dev
+DB_PASSWORD=qwert@12345
+DATABASE_URL=postgres://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_DATABASE)?sslmode=disable
+
+create-migrate-schema:
+	migrate create -ext sql -dir db/migration -seq init_schema
+
+migrate-up:
+	migrate -path db/migration -database $(DATABASE_URL) -verbose up
+
+migrate-force:
+	migrate -path db/migration -database $(DATABASE_URL) -verbose force 1
+
+migrate-down:
+	migrate -path db/migration -database $(DATABASE_URL) -verbose down
 
 # Build the application
 all: build
