@@ -1,3 +1,6 @@
+-- name: GetAllMusic :many
+SELECT * FROM Music;
+
 -- name: GetMusicByAlbumId :many
 SELECT * FROM album_music_musician_view WHERE album_id = $1;
 

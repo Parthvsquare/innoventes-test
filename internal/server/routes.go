@@ -18,7 +18,9 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r.Route("/music", func(r chi.Router) {
 		r.Get("/{musicId}", s.GetMusicWithId)
 		r.Get("/album/{albumId}", s.GetMusicByAlbumId)
+		r.Get("/", s.GetAllMusic)
 		r.Put("/", s.CreateMusic)
+		r.Patch("/", s.UpdateMusic)
 		r.Delete("/{musicId}", s.DeleteMusicWithId)
 	})
 
@@ -42,6 +44,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 		r.Get("/{musicianId}", s.GetMusicianById)
 		r.Get("/music/{musicianId}", s.GetMusicByMusicianId)
 		r.Get("/album/{musicianId}", s.GetMusicianByAlbumId)
+		r.Get("/", s.GetAllMusicians)
 		r.Put("/", s.AddNewMusician)
 		r.Patch("/", s.UpdateMusicianById)
 		r.Delete("/music/{musicId}", s.DeleteMusicianById)

@@ -10,6 +10,21 @@ import (
 	"github.com/google/uuid"
 )
 
+func (s *Server) GetAllMusicians(w http.ResponseWriter, r *http.Request) {
+	musician, err := s.db.GetAllMusicians(r.Context())
+
+	if err != nil {
+		log.Printf("error getting musician %v", err)
+		util.SendErrorResponse(w, http.StatusInternalServerError, "error getting musician ")
+		return
+	}
+
+	data := map[string]interface{}{
+		"data": musician,
+	}
+	util.SendSuccessResponse(w, data)
+}
+
 func (s *Server) GetMusicianById(w http.ResponseWriter, r *http.Request) {
 	musicianParamsId := chi.URLParam(r, "musicianId")
 

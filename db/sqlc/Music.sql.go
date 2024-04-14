@@ -55,6 +55,37 @@ func (q *Queries) DeleteMusic(ctx context.Context, musicID uuid.UUID) error {
 	return err
 }
 
+const getAllMusic = `-- name: GetAllMusic :many
+SELECT music_id, music_name, music_price, music_description, album_id, musician_id FROM Music
+`
+
+func (q *Queries) GetAllMusic(ctx context.Context) ([]Music, error) {
+	rows, err := q.db.Query(ctx, getAllMusic)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Music{}
+	for rows.Next() {
+		var i Music
+		if err := rows.Scan(
+			&i.MusicID,
+			&i.MusicName,
+			&i.MusicPrice,
+			&i.MusicDescription,
+			&i.AlbumID,
+			&i.MusicianID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMusicByAlbumId = `-- name: GetMusicByAlbumId :many
 SELECT music_id, music_name, music_price, music_description, album_id, album_name, release_date, genre, price, description, musician_id, musician_name, musician_type FROM album_music_musician_view WHERE album_id = $1
 `

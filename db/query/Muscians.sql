@@ -1,3 +1,6 @@
+-- name: GetAllMusicians :many
+SELECT * FROM Musicians;
+
 -- name: GetMusiciansById :one
 SELECT * FROM Musicians WHERE musician_id = $1;
 
