@@ -9,12 +9,23 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type Albummusician struct {
-	AlbumID    uuid.UUID `json:"album_id"`
-	MusicianID uuid.UUID `json:"musician_id"`
+type AlbumMusicMusicianView struct {
+	MusicID          uuid.UUID      `json:"music_id"`
+	MusicName        string         `json:"music_name"`
+	MusicPrice       pgtype.Numeric `json:"music_price"`
+	MusicDescription pgtype.Text    `json:"music_description"`
+	AlbumID          uuid.UUID      `json:"album_id"`
+	AlbumName        string         `json:"album_name"`
+	ReleaseDate      pgtype.Date    `json:"release_date"`
+	Genre            pgtype.Text    `json:"genre"`
+	Price            pgtype.Numeric `json:"price"`
+	Description      pgtype.Text    `json:"description"`
+	MusicianID       uuid.UUID      `json:"musician_id"`
+	MusicianName     string         `json:"musician_name"`
+	MusicianType     string         `json:"musician_type"`
 }
 
-type Albummusiciansview struct {
+type AlbumMusicianView struct {
 	AlbumID      uuid.UUID      `json:"album_id"`
 	AlbumName    string         `json:"album_name"`
 	ReleaseDate  pgtype.Date    `json:"release_date"`
@@ -24,6 +35,11 @@ type Albummusiciansview struct {
 	MusicianID   uuid.UUID      `json:"musician_id"`
 	MusicianName string         `json:"musician_name"`
 	MusicianType string         `json:"musician_type"`
+}
+
+type Albummusician struct {
+	AlbumID    uuid.UUID `json:"album_id"`
+	MusicianID uuid.UUID `json:"musician_id"`
 }
 
 type Music struct {
@@ -48,32 +64,4 @@ type Musician struct {
 	MusicianID   uuid.UUID `json:"musician_id"`
 	MusicianName string    `json:"musician_name"`
 	MusicianType string    `json:"musician_type"`
-}
-
-type Musiciansview struct {
-	MusicianID   uuid.UUID      `json:"musician_id"`
-	MusicianName string         `json:"musician_name"`
-	MusicianType string         `json:"musician_type"`
-	AlbumID      uuid.UUID      `json:"album_id"`
-	AlbumName    string         `json:"album_name"`
-	ReleaseDate  pgtype.Date    `json:"release_date"`
-	Genre        pgtype.Text    `json:"genre"`
-	Price        pgtype.Numeric `json:"price"`
-	Description  pgtype.Text    `json:"description"`
-}
-
-type Musicview struct {
-	MusicID          uuid.UUID      `json:"music_id"`
-	MusicName        string         `json:"music_name"`
-	MusicPrice       pgtype.Numeric `json:"music_price"`
-	MusicDescription pgtype.Text    `json:"music_description"`
-	AlbumID          uuid.UUID      `json:"album_id"`
-	AlbumName        string         `json:"album_name"`
-	ReleaseDate      pgtype.Date    `json:"release_date"`
-	Genre            pgtype.Text    `json:"genre"`
-	Price            pgtype.Numeric `json:"price"`
-	Description      pgtype.Text    `json:"description"`
-	MusicianID       uuid.UUID      `json:"musician_id"`
-	MusicianName     string         `json:"musician_name"`
-	MusicianType     string         `json:"musician_type"`
 }

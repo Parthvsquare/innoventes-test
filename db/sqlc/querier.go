@@ -11,13 +11,20 @@ import (
 )
 
 type Querier interface {
+	AddMusicianToAlbum(ctx context.Context, arg AddMusicianToAlbumParams) error
+	AddNewAlbum(ctx context.Context, arg AddNewAlbumParams) (Musicalbum, error)
 	AddNewMusic(ctx context.Context, arg AddNewMusicParams) (Music, error)
+	DeleteAlbum(ctx context.Context, albumID uuid.UUID) error
 	DeleteMusic(ctx context.Context, musicID uuid.UUID) error
-	GetMusicAlbumsById(ctx context.Context, albumID uuid.UUID) (Musicalbum, error)
-	GetMusicByAlbumId(ctx context.Context, albumID uuid.UUID) ([]Musicview, error)
+	DeleteMusicianFromAlbum(ctx context.Context, arg DeleteMusicianFromAlbumParams) error
+	GetAlbumByAlbumId(ctx context.Context, albumID uuid.UUID) (Musicalbum, error)
+	GetAlbumsByMusicianId(ctx context.Context, musicianID uuid.UUID) ([]AlbumMusicianView, error)
+	GetMusicByAlbumId(ctx context.Context, albumID uuid.UUID) ([]AlbumMusicMusicianView, error)
 	GetMusicById(ctx context.Context, musicID uuid.UUID) (Music, error)
 	MusiciansById(ctx context.Context, musicianID uuid.UUID) (Musician, error)
+	UpdateAlbum(ctx context.Context, arg UpdateAlbumParams) (Musicalbum, error)
 	UpdateMusic(ctx context.Context, arg UpdateMusicParams) (Music, error)
+	UpdateMusicianOfAlbum(ctx context.Context, arg UpdateMusicianOfAlbumParams) error
 }
 
 var _ Querier = (*Queries)(nil)

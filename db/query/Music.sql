@@ -1,5 +1,5 @@
 -- name: GetMusicByAlbumId :many
-SELECT * FROM MusicView WHERE album_id = $1;
+SELECT * FROM album_music_musician_view WHERE album_id = $1;
 
 -- name: GetMusicById :one
 SELECT * FROM Music WHERE music_id = $1;

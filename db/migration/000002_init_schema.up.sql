@@ -13,7 +13,7 @@ CREATE TABLE Music (
 
 -- creating view
 
-CREATE VIEW MusicView AS
+CREATE VIEW album_music_musician_view AS
 SELECT
 	mu.music_id,
 	mu.music_name,
@@ -21,10 +21,12 @@ SELECT
 	mu.music_description,
 	ma.album_id,
 	ma.album_name,
+
 	ma.release_date,
 	ma.genre,
 	ma.price,
 	ma.description,
+
 	ms.musician_id,
 	ms.musician_name,
 	ms.musician_type
@@ -32,3 +34,20 @@ FROM
 	Music mu
 	JOIN MusicAlbums ma ON mu.album_id = ma.album_id
 	JOIN Musicians ms ON ms.musician_id = mu.musician_id;
+
+CREATE VIEW album_musician_view AS
+SELECT
+    ma.album_id,
+    ma.album_name,
+    ma.release_date,
+    ma.genre,
+    ma.price,
+    ma.description,
+
+    mu.musician_id,
+    mu.musician_name,
+    mu.musician_type
+FROM
+    MusicAlbums ma
+    JOIN AlbumMusicians am ON ma.album_id = am.album_id
+    JOIN Musicians mu ON am.musician_id = mu.musician_id;

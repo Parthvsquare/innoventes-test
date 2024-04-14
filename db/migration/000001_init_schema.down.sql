@@ -1,0 +1,3 @@
+DROP TABLE MusicAlbums CASCADE;
+DROP TABLE Musicians CASCADE;
+DROP TABLE AlbumMusicians CASCADE;
