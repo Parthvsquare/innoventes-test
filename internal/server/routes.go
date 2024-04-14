@@ -17,7 +17,16 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	r.Get("/", s.HelloWorldHandler)
 	// r.Get("/health", s.healthHandler)
-	r.Get("/music-album/{id}", s.getMusicAlbum)
+	// Public Routes
+	// music
+	r.Route("/music", func(r chi.Router) {
+		r.Get("/music/{musicId}", s.GetMusicWithId)
+		r.Get("/music/album/{albumId}", s.GetMusicByAlbumId)
+		r.Put("/music", s.CreateMusic)
+		r.Delete("/music/{musicId}", s.DeleteMusicWithId)
+	})
+
+	// music album
 
 	return r
 }
