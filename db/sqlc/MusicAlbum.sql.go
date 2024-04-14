@@ -133,6 +133,109 @@ func (q *Queries) GetAlbumsByMusicianId(ctx context.Context, musicianID uuid.UUI
 	return items, nil
 }
 
+const getAlbumsByMusicianIdSorted = `-- name: GetAlbumsByMusicianIdSorted :many
+SELECT album_id, album_name, release_date, genre, price, description, musician_id, musician_name, musician_type
+FROM album_musician_view
+WHERE musician_id = $1
+ORDER BY price ASC
+`
+
+func (q *Queries) GetAlbumsByMusicianIdSorted(ctx context.Context, musicianID uuid.UUID) ([]AlbumMusicianView, error) {
+	rows, err := q.db.Query(ctx, getAlbumsByMusicianIdSorted, musicianID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []AlbumMusicianView{}
+	for rows.Next() {
+		var i AlbumMusicianView
+		if err := rows.Scan(
+			&i.AlbumID,
+			&i.AlbumName,
+			&i.ReleaseDate,
+			&i.Genre,
+			&i.Price,
+			&i.Description,
+			&i.MusicianID,
+			&i.MusicianName,
+			&i.MusicianType,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAllMusicAlbums = `-- name: GetAllMusicAlbums :many
+SELECT album_id, album_name, release_date, genre, price, description FROM MusicAlbums
+ORDER BY release_date ASC
+`
+
+func (q *Queries) GetAllMusicAlbums(ctx context.Context) ([]Musicalbum, error) {
+	rows, err := q.db.Query(ctx, getAllMusicAlbums)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Musicalbum{}
+	for rows.Next() {
+		var i Musicalbum
+		if err := rows.Scan(
+			&i.AlbumID,
+			&i.AlbumName,
+			&i.ReleaseDate,
+			&i.Genre,
+			&i.Price,
+			&i.Description,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMusicianForAlbum = `-- name: GetMusicianForAlbum :many
+SELECT album_id, album_name, release_date, genre, price, description, musician_id, musician_name, musician_type FROM album_musician_view WHERE album_id = $1 ORDER BY musician_name ASC
+`
+
+func (q *Queries) GetMusicianForAlbum(ctx context.Context, albumID uuid.UUID) ([]AlbumMusicianView, error) {
+	rows, err := q.db.Query(ctx, getMusicianForAlbum, albumID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []AlbumMusicianView{}
+	for rows.Next() {
+		var i AlbumMusicianView
+		if err := rows.Scan(
+			&i.AlbumID,
+			&i.AlbumName,
+			&i.ReleaseDate,
+			&i.Genre,
+			&i.Price,
+			&i.Description,
+			&i.MusicianID,
+			&i.MusicianName,
+			&i.MusicianType,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateAlbum = `-- name: UpdateAlbum :one
 UPDATE
   MusicAlbums

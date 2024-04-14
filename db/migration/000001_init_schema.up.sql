@@ -18,8 +18,8 @@ CREATE TABLE Musicians (
 );
 
 CREATE TABLE AlbumMusicians (
-    album_id uuid REFERENCES MusicAlbums(album_id),
-    musician_id uuid REFERENCES Musicians(musician_id),
+    album_id uuid REFERENCES MusicAlbums(album_id) ON DELETE CASCADE,
+    musician_id uuid REFERENCES Musicians(musician_id) ON DELETE CASCADE,
     PRIMARY KEY (album_id, musician_id)
 );
 

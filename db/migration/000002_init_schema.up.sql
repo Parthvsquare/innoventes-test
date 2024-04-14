@@ -1,14 +1,14 @@
 CREATE TABLE Music (
     music_id uuid DEFAULT gen_random_uuid(),
     music_name VARCHAR(255) NOT NULL CHECK (LENGTH(music_name) >= 5),
-    music_price NUMERIC(6,2) NOT NULL CHECK (music_price >= 100 AND music_price <= 1000),
+    music_price NUMERIC(6,2) NOT NULL,
     music_description TEXT,
     album_id uuid,
     musician_id uuid,
 
     PRIMARY KEY (music_id),
-    CONSTRAINT fk_album_id FOREIGN KEY (album_id) REFERENCES MusicAlbums(album_id),
-    CONSTRAINT fk_musician_id FOREIGN KEY (musician_id) REFERENCES Musicians(musician_id)
+    CONSTRAINT fk_album_id FOREIGN KEY (album_id) REFERENCES MusicAlbums(album_id) ON DELETE SET null,
+    CONSTRAINT fk_musician_id FOREIGN KEY (musician_id) REFERENCES Musicians(musician_id) ON DELETE SET null
 );
 
 -- creating view

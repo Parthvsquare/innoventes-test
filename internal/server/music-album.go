@@ -10,13 +10,27 @@ import (
 	"github.com/google/uuid"
 )
 
+func (s *Server) GetAllAlbums(w http.ResponseWriter, r *http.Request) {
+	allAlbums, err := s.db.GetAllMusicAlbums(r.Context())
+	if err != nil {
+		log.Printf("error getting albums by musician id %v", err)
+		util.SendErrorResponse(w, http.StatusInternalServerError, "error getting albums by musician id")
+		return
+	}
+
+	data := map[string]interface{}{
+		"data": allAlbums,
+	}
+	util.SendSuccessResponse(w, data)
+}
+
 func (s *Server) GetAlbumsByMusicianId(w http.ResponseWriter, r *http.Request) {
 	musicianParamsId := chi.URLParam(r, "musicianId")
 
 	musicianUUId, err := uuid.Parse(musicianParamsId)
 	if err != nil {
-		log.Printf("error parsing music id %v", err)
-		util.SendErrorResponse(w, http.StatusBadRequest, "invalid music id")
+		log.Printf("error parsing musician id %v", err)
+		util.SendErrorResponse(w, http.StatusBadRequest, "invalid musician id")
 		return
 	}
 
@@ -29,6 +43,52 @@ func (s *Server) GetAlbumsByMusicianId(w http.ResponseWriter, r *http.Request) {
 
 	data := map[string]interface{}{
 		"data": allAlbums,
+	}
+	util.SendSuccessResponse(w, data)
+}
+
+func (s *Server) GetAlbumsByMusicianIdSorted(w http.ResponseWriter, r *http.Request) {
+	musicianParamsId := chi.URLParam(r, "musicianId")
+
+	musicianUUId, err := uuid.Parse(musicianParamsId)
+	if err != nil {
+		log.Printf("error parsing musician id %v", err)
+		util.SendErrorResponse(w, http.StatusBadRequest, "invalid musician id")
+		return
+	}
+
+	allAlbums, err := s.db.GetAlbumsByMusicianIdSorted(r.Context(), musicianUUId)
+	if err != nil {
+		log.Printf("error getting albums by musician id %v", err)
+		util.SendErrorResponse(w, http.StatusInternalServerError, "error getting albums by musician id")
+		return
+	}
+
+	data := map[string]interface{}{
+		"data": allAlbums,
+	}
+	util.SendSuccessResponse(w, data)
+}
+
+func (s *Server) GetAlbumMusicians(w http.ResponseWriter, r *http.Request) {
+	albumIdParams := chi.URLParam(r, "albumId")
+
+	albumUUID, err := uuid.Parse(albumIdParams)
+	if err != nil {
+		log.Printf("error parsing album id %v", err)
+		util.SendErrorResponse(w, http.StatusBadRequest, "invalid album id")
+		return
+	}
+
+	allAlbumMusicians, err := s.db.GetMusicianForAlbum(r.Context(), albumUUID)
+	if err != nil {
+		log.Printf("error getting album musicians %v", err)
+		util.SendErrorResponse(w, http.StatusInternalServerError, "error getting album musicians")
+		return
+	}
+
+	data := map[string]interface{}{
+		"data": allAlbumMusicians,
 	}
 	util.SendSuccessResponse(w, data)
 }

@@ -14,16 +14,24 @@ type Querier interface {
 	AddMusicianToAlbum(ctx context.Context, arg AddMusicianToAlbumParams) error
 	AddNewAlbum(ctx context.Context, arg AddNewAlbumParams) (Musicalbum, error)
 	AddNewMusic(ctx context.Context, arg AddNewMusicParams) (Music, error)
+	AddNewMusician(ctx context.Context, arg AddNewMusicianParams) (Musician, error)
 	DeleteAlbum(ctx context.Context, albumID uuid.UUID) error
 	DeleteMusic(ctx context.Context, musicID uuid.UUID) error
+	DeleteMusician(ctx context.Context, musicianID uuid.UUID) error
 	DeleteMusicianFromAlbum(ctx context.Context, arg DeleteMusicianFromAlbumParams) error
 	GetAlbumByAlbumId(ctx context.Context, albumID uuid.UUID) (Musicalbum, error)
 	GetAlbumsByMusicianId(ctx context.Context, musicianID uuid.UUID) ([]AlbumMusicianView, error)
+	GetAlbumsByMusicianIdSorted(ctx context.Context, musicianID uuid.UUID) ([]AlbumMusicianView, error)
+	GetAllMusicAlbums(ctx context.Context) ([]Musicalbum, error)
 	GetMusicByAlbumId(ctx context.Context, albumID uuid.UUID) ([]AlbumMusicMusicianView, error)
 	GetMusicById(ctx context.Context, musicID uuid.UUID) (Music, error)
-	MusiciansById(ctx context.Context, musicianID uuid.UUID) (Musician, error)
+	GetMusicByMusicianId(ctx context.Context, musicianID uuid.UUID) ([]AlbumMusicMusicianView, error)
+	GetMusicianByAlbumId(ctx context.Context, albumID uuid.UUID) (AlbumMusicianView, error)
+	GetMusicianForAlbum(ctx context.Context, albumID uuid.UUID) ([]AlbumMusicianView, error)
+	GetMusiciansById(ctx context.Context, musicianID uuid.UUID) (Musician, error)
 	UpdateAlbum(ctx context.Context, arg UpdateAlbumParams) (Musicalbum, error)
 	UpdateMusic(ctx context.Context, arg UpdateMusicParams) (Music, error)
+	UpdateMusician(ctx context.Context, arg UpdateMusicianParams) (Musician, error)
 	UpdateMusicianOfAlbum(ctx context.Context, arg UpdateMusicianOfAlbumParams) error
 }
 

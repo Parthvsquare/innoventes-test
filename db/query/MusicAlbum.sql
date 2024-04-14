@@ -1,3 +1,7 @@
+-- name: GetAllMusicAlbums :many
+SELECT * FROM MusicAlbums
+ORDER BY release_date ASC;
+
 -- name: GetAlbumsByMusicianId :many
 SELECT * FROM album_musician_view WHERE musician_id = $1;
 
@@ -33,3 +37,12 @@ UPDATE AlbumMusicians
 SET
  musician_id = COALESCE(@old_musician_id, musician_id)
  WHERE album_id = $1 AND musician_id = @new_musician_id;
+
+-- name: GetAlbumsByMusicianIdSorted :many
+SELECT *
+FROM album_musician_view
+WHERE musician_id = $1
+ORDER BY price ASC;
+
+-- name: GetMusicianForAlbum :many
+SELECT * FROM album_musician_view WHERE album_id = $1 ORDER BY musician_name ASC;

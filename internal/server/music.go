@@ -65,15 +65,37 @@ func (s *Server) CreateMusic(w http.ResponseWriter, r *http.Request) {
 		util.SendErrorResponse(w, http.StatusBadRequest, err.Error())
 	}
 
-	musicWithGivenAlbumId, err := s.db.AddNewMusic(r.Context(), createMusic)
+	newMusic, err := s.db.AddNewMusic(r.Context(), createMusic)
 	if err != nil {
-		log.Printf("error getting music by album id %v", err)
-		util.SendErrorResponse(w, http.StatusInternalServerError, "error getting music by album id")
+		log.Printf("error creating music by %v", err)
+		util.SendErrorResponse(w, http.StatusInternalServerError, "error creating music")
 		return
 	}
 
 	data := map[string]interface{}{
-		"data": musicWithGivenAlbumId,
+		"data": newMusic,
+	}
+	util.SendSuccessResponse(w, data)
+}
+
+func (s *Server) UpdateMusic(w http.ResponseWriter, r *http.Request) {
+	var updateMusic db.UpdateMusicParams
+	err := util.UnmarshalBody(r, &updateMusic)
+
+	if err != nil {
+		log.Printf("error un marshalling request body %v", err)
+		util.SendErrorResponse(w, http.StatusBadRequest, err.Error())
+	}
+
+	updatedMusic, err := s.db.UpdateMusic(r.Context(), updateMusic)
+	if err != nil {
+		log.Printf("error updating music by %v", err)
+		util.SendErrorResponse(w, http.StatusInternalServerError, "error updating music")
+		return
+	}
+
+	data := map[string]interface{}{
+		"data": updatedMusic,
 	}
 	util.SendSuccessResponse(w, data)
 }
@@ -90,8 +112,8 @@ func (s *Server) DeleteMusicWithId(w http.ResponseWriter, r *http.Request) {
 
 	err = s.db.DeleteMusic(r.Context(), musicUUId)
 	if err != nil {
-		log.Printf("error getting music by music id %v", err)
-		util.SendErrorResponse(w, http.StatusInternalServerError, "error getting music by music id")
+		log.Printf("error deleting music by music id %v", err)
+		util.SendErrorResponse(w, http.StatusInternalServerError, "error deleting music by music id")
 		return
 	}
 

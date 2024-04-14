@@ -14,23 +14,24 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r.Use(middleware.Logger)
 
 	r.Get("/", s.HelloWorldHandler)
-	// r.Get("/health", s.healthHandler)
-	// Public Routes
 	// music
 	r.Route("/music", func(r chi.Router) {
-		r.Get("/music/{musicId}", s.GetMusicWithId)
-		r.Get("/music/album/{albumId}", s.GetMusicByAlbumId)
-		r.Put("/music", s.CreateMusic)
-		r.Delete("/music/{musicId}", s.DeleteMusicWithId)
+		r.Get("/{musicId}", s.GetMusicWithId)
+		r.Get("/album/{albumId}", s.GetMusicByAlbumId)
+		r.Put("/", s.CreateMusic)
+		r.Delete("/{musicId}", s.DeleteMusicWithId)
 	})
 
 	// music album
 	r.Route("/album", func(r chi.Router) {
 		r.Get("/{albumId}", s.GetMusicAlbumWithId)
+		r.Get("/", s.GetAllAlbums)
 		r.Put("/", s.AddNewAlbum)
 		r.Patch("/", s.UpdateAlbum)
 		r.Delete("/{albumId}", s.DeleteAlbumById)
 		r.Get("/musician/{musicianId}", s.GetAlbumsByMusicianId)
+		r.Get("/musician/{musicianId}/sort/price", s.GetAlbumsByMusicianId)
+		r.Get("/musician/all/{albumId}", s.GetAlbumMusicians)
 		r.Post("/musician", s.AddMusicianToAlbum)
 		r.Delete("/musician", s.RemoveMusicianFromAlbum)
 		r.Patch("/musician", s.UpdateMusicianOfAlbum)
@@ -38,10 +39,12 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	// musician
 	r.Route("/musician", func(r chi.Router) {
-		r.Get("/music/{musicId}", s.GetMusicWithId)
-		r.Get("/music/album/{albumId}", s.GetMusicByAlbumId)
-		r.Put("/music", s.CreateMusic)
-		r.Delete("/music/{musicId}", s.DeleteMusicWithId)
+		r.Get("/{musicianId}", s.GetMusicianById)
+		r.Get("/music/{musicianId}", s.GetMusicByMusicianId)
+		r.Get("/album/{musicianId}", s.GetMusicianByAlbumId)
+		r.Put("/", s.AddNewMusician)
+		r.Patch("/", s.UpdateMusicianById)
+		r.Delete("/music/{musicId}", s.DeleteMusicianById)
 	})
 
 	return r
